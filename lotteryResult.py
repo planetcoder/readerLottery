@@ -10,7 +10,7 @@ def hashToNumber(txhash,total):
   result = long(txhash, 16) % total 
   return result 
 
-def getBlocktxs(blockhash, number, total):
+def getBlocktxs(blockhash, number, total, startnum):
   url = "https://blockexplorer.com/api/block/" + blockhash
   params = dict()
   
@@ -21,7 +21,7 @@ def getBlocktxs(blockhash, number, total):
       print ("%d Transactions for %d results." % (len(data["tx"]), number) ) 
       for i in range(number):
         txhash=data["tx"][i];
-        r = hashToNumber  (txhash, total)
+        r = hashToNumber  (txhash, total) + startnum
         print ( "result %d is %d" % (i, r) )
     else:
       print ("only %d Transactions for %d results." % (len(data["tx"]), number) ) 
@@ -31,13 +31,14 @@ def getBlocktxs(blockhash, number, total):
     print "invalid block data"
 
 def main():
-  if len(sys.argv) ==4:
+  if len(sys.argv) == 5:
     blockhash = sys.argv[1]
     number = sys.argv[2]
     total= sys.argv[3]
-    getBlocktxs(blockhash, int(number), int(total))
+    startnum = sys.argv[4]
+    getBlocktxs(blockhash, int(number), int(total), int(startnum))
   else:
-    print "usage: ./lotteryResult.py blockhash number total"
+    print "usage: ./lotteryResult.py blockhash number total startnum"
 
 if __name__ == '__main__':
   main()
