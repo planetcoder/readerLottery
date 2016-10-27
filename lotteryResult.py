@@ -3,6 +3,7 @@
 import sys
 import json
 import requests
+import hashlib
 
 
 def hashToNumber(txhash, total):
@@ -21,7 +22,9 @@ def getBlocktxs(blockhash, number, total, startnum):
             print ("%d Transactions for %d results." % (len(data["tx"]), number))
             for i in range(number):
                 txhash=data["tx"][i]
-                r = hashToNumber(txhash, total) + startnum
+                hashwithtotal = txhash + str(total)
+                resulthash = hashlib.sha1(hashwithtotal).hexdigest()
+                r = hashToNumber(resulthash , total) + startnum
                 print ("result %d is %d" % (i, r))
         else:
             print ("only %d Transactions for %d results." % (len(data["tx"]), number))
